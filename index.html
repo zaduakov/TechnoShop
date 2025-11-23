@@ -3,63 +3,355 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Оформление заказа</title>
+<title>TechShop</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="main.js" />
 <style>
-body { font-family: 'Segoe UI', sans-serif; background:#f5f5f7; margin:0; padding:20px; }
-h2 { color:#d7000f; }
-form { background:white; padding:20px; border-radius:10px; max-width:400px; margin:auto; box-shadow:0 0 15px rgba(0,0,0,.2); }
-input, textarea { width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc; }
-button { width:100%; padding:12px; border:none; border-radius:10px; background:#d7000f; color:white; cursor:pointer; font-size:16px; }
-button:hover { background:#b2000b; }
-ul { padding-left:20px; }
+body { margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f5f5f7; }
+header { background:#d7000f; color:white; padding:15px 20px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 6px rgba(0,0,0,.15); }
+header .logo { font-size:22px; font-weight:bold; letter-spacing:1px; }
+header .search { flex:1; margin:0 20px; position:relative; }
+.search input { width:100%; padding:10px 15px; border-radius:30px; border:none; box-shadow:0 2px 6px rgba(0,0,0,.1); outline:none; font-size:14px; }
+.search-suggestions { position:absolute; top:45px; left:0; width:100%; background:white; border:1px solid #ccc; border-radius:10px; max-height:200px; overflow-y:auto; display:none; z-index:5; box-shadow:0 4px 12px rgba(0,0,0,.15); }
+.search-suggestions div { padding:10px 15px; cursor:pointer; transition:0.2s; }
+.search-suggestions div:hover { background:#f0f0f0; }
+
+.categories { background:white; padding:10px 15px; display:flex; gap:15px; overflow-x:auto; box-shadow:0 2px 6px rgba(0,0,0,.05); border-radius:10px; margin:10px 20px; }
+.categories span { cursor:pointer; font-size:15px; white-space:nowrap; padding:6px 12px; border-radius:20px; transition:0.2s; border:1px solid transparent; }
+.categories span:hover, .categories .active { background:#d7000f; color:white; border-color:#d7000f; }
+
+.filters { display:flex; gap:10px; margin:10px 20px; background:white; padding:10px 15px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,.05); align-items:center; }
+.filters label { font-size:14px; }
+.filters input { width:80px; padding:6px 10px; border-radius:6px; border:1px solid #ccc; }
+
+.filters button { padding:6px 12px; border:none; border-radius:20px; background:#d7000f; color:white; cursor:pointer; transition:0.2s; font-size:14px; }
+.filters button:hover { background:#b2000b; }
+
+.products { padding:20px; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; }
+.card { background:white; padding:15px; border-radius:15px; transition:0.3s; cursor:pointer; border:1px solid transparent; box-shadow:0 2px 6px rgba(0,0,0,.05); }
+.card:hover { border-color:#d7000f; transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,.1); }
+.card img { width:100%; height:180px; object-fit:contain; border-radius:10px; }
+.card .title { margin:10px 0 5px; font-size:15px; font-weight:600; }
+.card .price { color:#d7000f; font-size:18px; font-weight:bold; }
+.card button { margin-top:8px; padding:8px 12px; border:none; border-radius:20px; background:#d7000f; color:white; cursor:pointer; transition:0.2s; }
+.card button:hover { background:#b2000b; }
+
+.product-details { background:#fff3f3; padding:10px; border-radius:10px; margin-top:10px; font-size:14px; }
+.product-details h4 { margin:5px 0; }
+.product-details ul { margin:0; padding-left:20px; }
+.review { margin-bottom:5px; }
+
+/* Корзина */
+.mini-cart { position:fixed; right:-400px; top:0; width: 350px; height:100%; background:white; box-shadow:-3px 0 10px rgba(0,0,0,.2); transition:0.35s; padding:20px; overflow-y:auto; z-index:10; border-radius:10px 0 0 10px; }
+.mini-cart.open { right:0; }
+.mini-cart h2 { margin-top:0; border-bottom:1px solid #eee; padding-bottom:10px; }
+.cart-item { display:flex; gap:10px; margin-bottom:15px; align-items:center; padding:5px 0; border-bottom:1px solid #f0f0f0; }
+.cart-item img { width:60px; height:60px; object-fit:contain; border-radius:10px; }
+.cart-item .qty { display:flex; gap:5px; align-items:center; }
+.cart-item button { padding:4px 8px; cursor:pointer; border:none; border-radius:6px; background:#d7000f; color:white; transition:0.2s; }
+.cart-item button:hover { background:#b2000b; }
+.cart-total { display:flex; justify-content:space-between; font-weight:bold; font-size:16px; margin-top:10px; }
+.checkout { background:#d7000f; color:white; padding:12px; text-align:center; border-radius:20px; margin-top:15px; cursor:pointer; font-weight:bold; transition:0.2s; }
+.checkout:hover { background:#b2000b; }
+
+/* Админ */
+#admin-panel { position:fixed; top:60px; left:50%; transform:translateX(-50%); width:350px; background:white; padding:20px; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,.3); z-index:999; display:none; }
+#admin-panel input, #admin-panel textarea, #admin-panel select { width:100%; padding:8px; margin-bottom:10px; border-radius:6px; border:1px solid #aaa; }
+#admin-panel button { width:100%; padding:10px; background:#d7000f; border:none; color:white; border-radius:8px; cursor:pointer; transition:0.2s; }
+#admin-panel button:hover { background:#b2000b; }
 </style>
 </head>
 <body>
 
-<h2>Оформление заказа</h2>
+<header>
+  <div class="logo">TechShop</div>
+  <div class="search">
+    <input id="searchInput" type="text" placeholder="Поиск товаров…">
+    <div class="search-suggestions" id="suggestions"></div>
+  </div>
+  <div class="cart-btn" onclick="toggleCart()">🛒 (<span id="cartCount">0</span>)</div>
+  <div class="admin-btn" onclick="openAdmin()">⚙️</div>
+</header>
 
-<h3>Ваши товары:</h3>
-<ul id="orderList"></ul>
-<div><strong>Итого: </strong><span id="orderTotal">0</span> ₸</div>
+<div class="categories">
+  <span onclick="filterCategory('all')" class="active">Все</span>
+  <span onclick="filterCategory('phones')">Смартфоны</span>
+  <span onclick="filterCategory('laptops')">Ноутбуки</span>
+  <span onclick="filterCategory('tv')">Телевизоры</span>
+  <span onclick="filterCategory('keyboards')">Клавиатуры</span>
+  <span onclick="filterCategory('mouse')">Мышки</span>
+  <span onclick="filterCategory('Screen')">Мониторы</span>
+  <span onclick="filterCategory('Charging')">Зарядки</span>
+  <span onclick="filterCategory('Headphones')">Наушники</span>
+  <span onclick="filterCategory('Computers')">Компьютеры</span>
+</div>
 
-<form id="orderForm">
-  <input type="text" id="customerName" placeholder="Ваше имя" required>
-  <input type="text" id="customerPhone" placeholder="Телефон" required>
-  <textarea id="customerAddress" placeholder="Адрес доставки" required></textarea>
-  <button type="submit">Подтвердить заказ</button>
-</form>
+<div class="filters">
+  <label>Цена от: <input type="number" id="priceMin" placeholder="0"></label>
+  <label>до: <input type="number" id="priceMax" placeholder="1000000"></label>
+  <button onclick="filterPrice()">Применить</button>
+</div>
+
+<div class="products" id="products"></div>
+
+<!-- MINI CART -->
+<!-- Мини-корзина -->
+<div class="mini-cart" id="miniCart">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <h2>Корзина</h2>
+      <span style="cursor:pointer; font-size:20px;" onclick="toggleCart()">✖️</span>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-total">
+      <span>Итого:</span>
+      <span id="cartTotal">0</span> ₸
+    </div>
+    <div class="checkout" onclick="goToCheckout()">Оформить заказ</div>
+  </div>
+<div id="checkoutForm" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+background:white; padding:25px; border-radius:15px; box-shadow:0 0 30px rgba(0,0,0,.5); z-index:200; width:320px; max-width:90%;">
+  <h2 style="margin-top:0; text-align:center;">Оформление заказа</h2>
+  <input type="text" id="customerName" placeholder="Ваше имя" style="width:100%; margin-bottom:10px; padding:10px; border-radius:6px; border:1px solid #ccc;">
+  <input type="text" id="customerPhone" placeholder="Телефон" style="width:100%; margin-bottom:10px; padding:10px; border-radius:6px; border:1px solid #ccc;">
+  <textarea id="customerAddress" placeholder="Адрес доставки" style="width:100%; margin-bottom:10px; padding:10px; border-radius:6px; border:1px solid #ccc;"></textarea>
+  <button onclick="submitOrder()" style="width:100%; padding:12px; background:#d7000f; color:white; border:none; border-radius:10px; margin-bottom:10px; cursor:pointer;">Отправить заказ</button>
+  <button onclick="closeCheckout()" style="width:100%; padding:12px; background:#444; color:white; border:none; border-radius:10px; cursor:pointer;">Отмена</button>
+
+
+</div>
+
+</script>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+  <h2>Добавить товар</h2>
+  <input id="ad-title" placeholder="Название">
+  <input id="ad-price" type="number" placeholder="Цена">
+  <select id="ad-category">
+    <option value="phones">Телефоны</option>
+    <option value="laptops">Ноутбуки</option>
+    <option value="tv">Телевизоры</option>
+    <option value="food">Продукты</option>
+  </select>
+  <input id="ad-img" placeholder="URL фото">
+  <textarea id="ad-desc" placeholder="Описание"></textarea>
+  <button onclick="saveProduct()">Сохранить</button>
+  <button onclick="closeAdmin()" style="background:#444;margin-top:10px;">Закрыть</button>
+</div>
+
 
 <script>
-const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-const orderList = document.getElementById('orderList');
-const orderTotal = document.getElementById('orderTotal');
+// Продукты
+let products = [
+  { id:1, name:"Смартфон Apple iPhone 14 Pro 256Gb черный", price:563943, category:"phones", img:"image/Iphone 14 Pro.jpg",
+     description:"Новый iPhone 14 Pro с передовыми технологиями и улучшенной камерой.",
+    specs:["Экран: 6.1 дюйма","Процессор: A16 Bionic","Камера: 48 МП","Аккумулятор: до 23 часов видео","Оперативная память: 6 ГБ"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+  },
+  { id:2, name:"Смартфон Samsung Galaxy S23 Ultra 5G 12 ГБ/512 ГБ сиреневый", price:584989, category:"phones", img:"image/Samsung S23 Ultra.jpg",
+  description:"Samsung Galaxy S23 Ultra с мощным процессором и впечатляющей камерой.",
+    specs:["Экран: 6.8 дюйма","Процессор: Snapdragon 8 Gen 2","Камера: 200 МП","Аккумулятор: до 25 часов видео","Оперативная память: 12 ГБ"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+   },
+  { id:3, name:"Ноутбук Apple MacBook Pro 14 2024 14.2", price:989991, category:"laptops", img:"image/Macbook Pro 14.jpeg",
+    specs:["Экран: 14.2 дюйма","Процессор: M2 Pro","Оперативная память: 16 ГБ","Накопитель: 512 ГБ SSD","Графика: Apple GPU 16-ядерная"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+   },
 
-let total = 0;
-cart.forEach(i=>{
-  const li = document.createElement('li');
-  li.textContent = `${i.name} x${i.qty} = ${(i.price*i.qty).toLocaleString()} ₸`;
-  orderList.appendChild(li);
-  total += i.price*i.qty;
+  { id:4, name:"Клавиатура Ajazz AK820 Pro белый", price:24487, category:"keyboards", img:"image/Ajazz AK820 Pro Белый.jpg",
+  description:"Механическая клавиатура Ajazz AK820 Pro с RGB-подсветкой и удобной эргономикой.",
+    specs:["Тип: Механическая","Подсветка: RGB","Подключение: Проводное","Совместимость: Windows, MacOS","Дополнительно: Регулируемые ножки"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+   },
+
+  { id:5, name:"Клавиатура Ajazz AK820 черный", price:14447, category:"keyboards", img:"image/Ajazz AK820.jpg",
+    description:"Механическая клавиатура Ajazz AK820 с RGB-подсветкой и удобной эргономикой.",
+    specs:["Тип: Механическая","Подсветка: RGB","Подключение: Проводное","Совместимость: Windows, MacOS","Дополнительно: Регулируемые ножки"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+  },
+  { id:6, name:"PIXEL i5-10400F / RTX 3060 12 Гб / 16 Гб / SSD 512 Гб / Win 10", price:314997, category:"Computers", img:"image/PIXEL.jpg",
+    description:"Представляем вам мощный системный блок PIXEL, который идеально подходит для игр и работы. С видеокартой NVIDIA GeForce RTX 3060",
+    specs:["Графический процессорNVIDIA GeForce RTX 3060 с 12 ГБ видеопамятиТип процессораIntel Core i5-10400F (6 ядер по 2.9 - 4.3 ГГц)Оперативная память16 ГБ DDR4НакопительSSD 512 ГБИнтерфейсыWi-Fi, Bluetooth, Ethernet, USB 3.0, USB-C, HDMI, DisplayPortОперационная системаWindows 10"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+  },
+  { id:7, name:"Наушники AULA S6 бело-синий", price:11489, category:"Headphones", img:"image/AULA S6 бело-синий.jfif",
+    description:"Наушники AULA S6 с качественным звуком и комфортной посадкой для длительного использования.",
+    specs:["Наушники: Полноразмерные, закрытые","Подключение: Проводное","Совместимость: ПК, ноутбуки, игровые консоли","Микрофон: Встроенный с шумоподавлением","Дополнительно: Регулируемое оголовье, мягкие амбушюры"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+  },
+  { id:8, name:"Монитор 27 XTREON XT2753PH черный", price:64990, category:"Screen", img:"image/XTREON XT2753PH черный.jpg",
+    description:"Монитор XTREON XT2753PH с диагональю 27 дюймов и разрешением Full HD для комфортной работы и развлечений.",
+    specs:["Диагональ: 27 дюймов","Разрешение: Full HD (1920x1080)","Тип матрицы: IPS","Частота обновления: 75 Гц","Интерфейсы: HDMI, VGA, DisplayPort"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+  },
+  { id:9, name:"Мышь Logitech G305 Lightspeed 910-005291 белый", price:34980, category:"mouse", img:"image/Logitech G305 Lightspeed 910-005291 белый.jpg",
+    description:"Мышь Logitech G305 Lightspeed с высокой точностью и беспроводным подключением для комфортной работы и игр.",
+    specs:["Тип: Беспроводная игровая мышь","Разрешение сенсора: до 12000 DPI","Количество кнопок: 6 программируемых кнопок","Подключение: Lightspeed беспроводное","Дополнительно: Легкий вес, длительное время работы от батареи"],
+    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+  }
+];
+
+let filteredProducts = [...products];
+let openDetailsId = null;
+
+// Рендер товаров
+function render(list){
+  const c = document.getElementById("products");
+  c.innerHTML = "";
+  list.forEach(p=>{
+    const card = document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <img src="${p.img}">
+      <div class="title">${p.name}</div>
+      <div class="price">${p.price.toLocaleString()} ₸</div>
+      <button onclick="addToCart(${p.id}); event.stopPropagation()">В корзину</button>
+      <div id="details-${p.id}" class="product-details" style="display:none;"></div>
+    `;
+    card.onclick = () => { toggleDetails(p.id); }
+    c.appendChild(card);
+  });
+}
+
+function toggleDetails(id){
+  const detailsDiv = document.getElementById(`details-${id}`);
+  if(openDetailsId && openDetailsId!==id){
+    document.getElementById(`details-${openDetailsId}`).style.display='none';
+  }
+  if(detailsDiv.style.display==='none'){
+    const p = products.find(x=>x.id===id);
+    let html = `<p>${p.description||''}</p>`;
+    if(p.specs){
+      html += "<h4>Характеристики:</h4><ul>";
+      p.specs.forEach(s=>html+="<li>"+s+"</li>");
+      html+="</ul>";
+    }
+    if(p.reviews){
+      html += "<h4>Отзывы:</h4><ul>";
+      p.reviews.forEach(r=>html+=`<li class="review"><b>${r.name}</b>: ${r.text} (${r.rating}/5)</li>`);
+      html+="</ul>";
+    }
+    detailsDiv.innerHTML = html;
+    detailsDiv.style.display='block';
+    openDetailsId = id;
+  } else {
+    detailsDiv.style.display='none';
+    openDetailsId = null;
+  }
+}
+
+// Категории
+function filterCategory(cat){
+  filteredProducts = (cat==='all') ? [...products] : products.filter(p=>p.category===cat);
+  render(filteredProducts);
+  document.querySelectorAll('.categories span').forEach(s=>s.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Поиск
+const searchInput = document.getElementById("searchInput");
+const suggestions = document.getElementById("suggestions");
+searchInput.addEventListener("input", ()=>{
+  const val = searchInput.value.toLowerCase();
+  const matches = products.filter(p=>p.name.toLowerCase().includes(val));
+  suggestions.innerHTML = "";
+  if(val!==""){
+    matches.forEach(p=>{
+      const div = document.createElement("div");
+      div.textContent = p.name;
+      div.onclick = ()=>{ searchInput.value=p.name; filterSearch(); suggestions.style.display='none'; }
+      suggestions.appendChild(div);
+    });
+    suggestions.style.display='block';
+  } else suggestions.style.display='none';
 });
-orderTotal.textContent = total.toLocaleString();
+function filterSearch(){
+  const val = searchInput.value.toLowerCase();
+  filteredProducts = products.filter(p=>p.name.toLowerCase().includes(val));
+  render(filteredProducts);
+}
 
-// Обработка формы
-document.getElementById('orderForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  const name = document.getElementById('customerName').value.trim();
-  const phone = document.getElementById('customerPhone').value.trim();
-  const address = document.getElementById('customerAddress').value.trim();
-  if(!name || !phone || !address){ alert("Заполните все поля!"); return; }
+// Фильтр цены
+function filterPrice(){
+  const min = Number(document.getElementById("priceMin").value)||0;
+  const max = Number(document.getElementById("priceMax").value)||Infinity;
+  filteredProducts = filteredProducts.filter(p=>p.price>=min && p.price<=max);
+  render(filteredProducts);
+}
 
-  let msg = "Заказ подтверждён!\n\nТовары:\n";
-  cart.forEach(i=>{ msg += `${i.name} x${i.qty} = ${(i.price*i.qty).toLocaleString()} ₸\n`; });
-  msg += `\nИтого: ${total.toLocaleString()} ₸\n`;
-  msg += `\nИмя: ${name}\nТелефон: ${phone}\nАдрес: ${address}`;
-  alert(msg);
+// Корзина
+let cart = [];
+const cartCount = document.getElementById("cartCount");
+const miniCart = document.getElementById("miniCart");
+const cartItems = document.getElementById("cartItems");
+const cartTotal = document.getElementById("cartTotal");
 
-  localStorage.removeItem('cartItems');
-  window.location.href = 'index.html';
-});
+function toggleCart(){ miniCart.classList.toggle("open"); }
+
+function addToCart(id){
+  const p = products.find(x=>x.id===id);
+  let f = cart.find(x=>x.id===id);
+  if(f) f.qty++;
+  else cart.push({...p, qty:1});
+  updateCart();
+}
+
+function changeQty(id,dir){
+  const item = cart.find(x=>x.id===id);
+  if(dir==='+') item.qty++; else item.qty--;
+  if(item.qty<=0) cart = cart.filter(x=>x.id!==id);
+  updateCart();
+}
+
+function updateCart(){
+  cartItems.innerHTML="";
+  let total=0, count=0;
+  cart.forEach(i=>{
+    total+=i.qty*i.price;
+    count+=i.qty;
+    cartItems.innerHTML+=`
+      <div class="cart-item">
+        <img src="${i.img}">
+        <div>
+          <div>${i.name}</div>
+          <div class="qty">
+            <button onclick="changeQty(${i.id},'-')">-</button>
+            <span>${i.qty}</span>
+            <button onclick="changeQty(${i.id},'+')">+</button>
+          </div>
+        </div>
+      </div>`;
+  });
+  cartTotal.textContent = total.toLocaleString();
+  cartCount.textContent = count;
+}
+
+// Админ
+const admin_panel = document.getElementById("admin-panel");
+function openAdmin(){ admin_panel.style.display="block"; }
+function closeAdmin(){ admin_panel.style.display="none"; }
+function saveProduct(){
+  const newP = {
+    id:Date.now(),
+    name:document.getElementById("ad-title").value,
+    price:Number(document.getElementById("ad-price").value),
+    category:document.getElementById("ad-category").value,
+    img:document.getElementById("ad-img").value,
+    description:document.getElementById("ad-desc").value
+  };
+  products.push(newP);
+  filteredProducts.push(newP);
+  render(filteredProducts);
+  closeAdmin();
+}
+render(filteredProducts);
+
+// Переход на checkout.html
+function goToCheckout(){
+  if(cart.length===0){ alert("Корзина пуста!"); return; }
+  localStorage.setItem('cartItems', JSON.stringify(cart));
+  window.location.href = 'checkout.html';
+}
 </script>
 </body>
 </html>
