@@ -11,7 +11,7 @@ body { margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; b
 header { background:#d7000f; color:white; padding:15px 20px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 6px rgba(0,0,0,.15); }
 header .logo { font-size:22px; font-weight:bold; letter-spacing:1px; }
 header .search { flex:1; margin:0 20px; position:relative; }
-.search input { width:100%; padding:10px 15px; border-radius:30px; border:none; box-shadow:0 2px 6px rgba(0,0,0,.1); outline:none; font-size:14px; }
+.search input { width:260px; padding:10px 15px; border-radius:30px; border:none; box-shadow:0 2px 6px rgba(0,0,0,.1); outline:none; font-size:14px; }
 .search-suggestions { position:absolute; top:45px; left:0; width:100%; background:white; border:1px solid #ccc; border-radius:10px; max-height:200px; overflow-y:auto; display:none; z-index:5; box-shadow:0 4px 12px rgba(0,0,0,.15); }
 .search-suggestions div { padding:10px 15px; cursor:pointer; transition:0.2s; }
 .search-suggestions div:hover { background:#f0f0f0; }
@@ -64,7 +64,10 @@ header .search { flex:1; margin:0 20px; position:relative; }
 <body>
 
 <header>
-  <div class="logo">TechShop</div>
+  <div class="logo">
+    TechShop
+    <div class="subtitle">Онталап Адылет сайты</div>
+</div>
   <div class="search">
     <input id="searchInput" type="text" placeholder="Поиск товаров…">
     <div class="search-suggestions" id="suggestions"></div>
@@ -95,32 +98,22 @@ header .search { flex:1; margin:0 20px; position:relative; }
 <div class="products" id="products"></div>
 
 <!-- MINI CART -->
-<!-- Мини-корзина -->
 <div class="mini-cart" id="miniCart">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-      <h2>Корзина</h2>
-      <span style="cursor:pointer; font-size:20px;" onclick="toggleCart()">✖️</span>
-    </div>
-    <div id="cartItems"></div>
-    <div class="cart-total">
-      <span>Итого:</span>
-      <span id="cartTotal">0</span> ₸
-    </div>
-    <div class="checkout" onclick="goToCheckout()">Оформить заказ</div>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+    <h2>Корзина</h2>
+    <span style="cursor:pointer; font-size:20px;" onclick="toggleCart()">✖️</span>
   </div>
-<div id="checkoutForm" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-background:white; padding:25px; border-radius:15px; box-shadow:0 0 30px rgba(0,0,0,.5); z-index:200; width:320px; max-width:90%;">
-  <h2 style="margin-top:0; text-align:center;">Оформление заказа</h2>
-  <input type="text" id="customerName" placeholder="Ваше имя" style="width:100%; margin-bottom:10px; padding:10px; border-radius:6px; border:1px solid #ccc;">
-  <input type="text" id="customerPhone" placeholder="Телефон" style="width:100%; margin-bottom:10px; padding:10px; border-radius:6px; border:1px solid #ccc;">
-  <textarea id="customerAddress" placeholder="Адрес доставки" style="width:100%; margin-bottom:10px; padding:10px; border-radius:6px; border:1px solid #ccc;"></textarea>
-  <button onclick="submitOrder()" style="width:100%; padding:12px; background:#d7000f; color:white; border:none; border-radius:10px; margin-bottom:10px; cursor:pointer;">Отправить заказ</button>
-  <button onclick="closeCheckout()" style="width:100%; padding:12px; background:#444; color:white; border:none; border-radius:10px; cursor:pointer;">Отмена</button>
+  
+  <div id="cartItems"></div>
 
+  <div class="cart-total">
+    <span>Итого:</span>
+    <span id="cartTotal">0</span> ₸
+  </div>
 
+  <!-- КНОПКА ПЕРЕХОДА -->
+  <div class="checkout" onclick="window.location.href='checkout.html'">Оформить заказ</div>
 </div>
-
-</script>
 
 <!-- ADMIN PANEL -->
 <div id="admin-panel">
@@ -139,55 +132,445 @@ background:white; padding:25px; border-radius:15px; box-shadow:0 0 30px rgba(0,0
   <button onclick="closeAdmin()" style="background:#444;margin-top:10px;">Закрыть</button>
 </div>
 
-
 <script>
 // Продукты
 let products = [
-  { id:1, name:"Смартфон Apple iPhone 14 Pro 256Gb черный", price:563943, category:"phones", img:"image/Iphone 14 Pro.jpg",
-     description:"Новый iPhone 14 Pro с передовыми технологиями и улучшенной камерой.",
-    specs:["Экран: 6.1 дюйма","Процессор: A16 Bionic","Камера: 48 МП","Аккумулятор: до 23 часов видео","Оперативная память: 6 ГБ"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+{
+    id:1,
+    name:"Смартфон Apple iPhone 14 Pro 256Gb черный",
+    price:563943,
+    category:"phones",
+    img:"image/Iphone 14 Pro.jpg",
+    description:"Новый iPhone 14 Pro с передовыми технологиями и улучшенной камерой.",
+    specs:[
+      "Экран: 6.1 дюйма",
+      "Процессор: A16 Bionic",
+      "Камера: 48 МП",
+      "Аккумулятор: до 23 часов видео",
+      "Оперативная память: 6 ГБ"
+    ],
+    reviews:[
+      {name:"Алихан", text:"Телефон просто топ! Камера огонь.", rating:5},
+      {name:"Диана", text:"Очень плавный, нравится дизайн.", rating:5}
+    ]
   },
-  { id:2, name:"Смартфон Samsung Galaxy S23 Ultra 5G 12 ГБ/512 ГБ сиреневый", price:584989, category:"phones", img:"image/Samsung S23 Ultra.jpg",
-  description:"Samsung Galaxy S23 Ultra с мощным процессором и впечатляющей камерой.",
-    specs:["Экран: 6.8 дюйма","Процессор: Snapdragon 8 Gen 2","Камера: 200 МП","Аккумулятор: до 25 часов видео","Оперативная память: 12 ГБ"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
-   },
-  { id:3, name:"Ноутбук Apple MacBook Pro 14 2024 14.2", price:989991, category:"laptops", img:"image/Macbook Pro 14.jpeg",
-    specs:["Экран: 14.2 дюйма","Процессор: M2 Pro","Оперативная память: 16 ГБ","Накопитель: 512 ГБ SSD","Графика: Apple GPU 16-ядерная"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
-   },
 
-  { id:4, name:"Клавиатура Ajazz AK820 Pro белый", price:24487, category:"keyboards", img:"image/Ajazz AK820 Pro Белый.jpg",
-  description:"Механическая клавиатура Ajazz AK820 Pro с RGB-подсветкой и удобной эргономикой.",
-    specs:["Тип: Механическая","Подсветка: RGB","Подключение: Проводное","Совместимость: Windows, MacOS","Дополнительно: Регулируемые ножки"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
-   },
+  {
+    id:2,
+    name:"Смартфон Samsung Galaxy S23 Ultra 5G 12 ГБ/512 ГБ сиреневый",
+    price:584989,
+    category:"phones",
+    img:"image/Samsung S23 Ultra.jpg",
+    description:"Samsung Galaxy S23 Ultra с мощным процессором и впечатляющей камерой.",
+    specs:[
+      "Экран: 6.8 дюйма",
+      "Процессор: Snapdragon 8 Gen 2",
+      "Камера: 200 МП",
+      "Аккумулятор: до 25 часов видео",
+      "Оперативная память: 12 ГБ"
+    ],
+    reviews:[
+      {name:"Ерлан", text:"Камера просто пушка, зум потрясающий.", rating:5},
+      {name:"Айдана", text:"Экран яркий, работает быстро.", rating:4}
+    ]
+  },
 
-  { id:5, name:"Клавиатура Ajazz AK820 черный", price:14447, category:"keyboards", img:"image/Ajazz AK820.jpg",
-    description:"Механическая клавиатура Ajazz AK820 с RGB-подсветкой и удобной эргономикой.",
-    specs:["Тип: Механическая","Подсветка: RGB","Подключение: Проводное","Совместимость: Windows, MacOS","Дополнительно: Регулируемые ножки"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+  {
+    id:3,
+    name:"Ноутбук Apple MacBook Pro 14 2024 14.2",
+    price:989991,
+    category:"laptops",
+    img:"image/Macbook Pro 14.jpeg",
+    specs:[
+      "Экран: 14.2 дюйма",
+      "Процессор: M2 Pro",
+      "Оперативная память: 16 ГБ",
+      "Накопитель: 512 ГБ SSD",
+      "Графика: Apple GPU 16-ядерная"
+    ],
+    reviews:[
+      {name:"Данияр", text:"Мощный, тихий, батарея держит отлично.", rating:5},
+      {name:"Аружан", text:"Идеален для учебы и работы.", rating:5}
+    ]
   },
-  { id:6, name:"PIXEL i5-10400F / RTX 3060 12 Гб / 16 Гб / SSD 512 Гб / Win 10", price:314997, category:"Computers", img:"image/PIXEL.jpg",
-    description:"Представляем вам мощный системный блок PIXEL, который идеально подходит для игр и работы. С видеокартой NVIDIA GeForce RTX 3060",
-    specs:["Графический процессорNVIDIA GeForce RTX 3060 с 12 ГБ видеопамятиТип процессораIntel Core i5-10400F (6 ядер по 2.9 - 4.3 ГГц)Оперативная память16 ГБ DDR4НакопительSSD 512 ГБИнтерфейсыWi-Fi, Bluetooth, Ethernet, USB 3.0, USB-C, HDMI, DisplayPortОперационная системаWindows 10"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+
+  {
+    id:4,
+    name:"Клавиатура Ajazz AK820 Pro белый",
+    price:24487,
+    category:"keyboards",
+    img:"image/Ajazz AK820 Pro Белый.jpg",
+    description:"Механическая клавиатура Ajazz AK820 Pro с RGB-подсветкой.",
+    specs:[
+      "Тип: Механическая",
+      "Подсветка: RGB",
+      "Подключение: Проводное",
+      "Совместимость: Windows, MacOS",
+      "Дополнительно: Регулируемые ножки"
+    ],
+    reviews:[
+      {name:"Нуржан", text:"Клики приятные, звук мягкий.", rating:5},
+      {name:"Самат", text:"Подсветка огонь! Очень нравится.", rating:4}
+    ]
   },
-  { id:7, name:"Наушники AULA S6 бело-синий", price:11489, category:"Headphones", img:"image/AULA S6 бело-синий.jfif",
-    description:"Наушники AULA S6 с качественным звуком и комфортной посадкой для длительного использования.",
-    specs:["Наушники: Полноразмерные, закрытые","Подключение: Проводное","Совместимость: ПК, ноутбуки, игровые консоли","Микрофон: Встроенный с шумоподавлением","Дополнительно: Регулируемое оголовье, мягкие амбушюры"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+
+  {
+    id:5,
+    name:"Клавиатура Ajazz AK820 черный",
+    price:14447,
+    category:"keyboards",
+    img:"image/Ajazz AK820.jpg",
+    description:"Механическая клавиатура Ajazz AK820 с RGB-подсветкой.",
+    specs:[
+      "Тип: Механическая",
+      "Подсветка: RGB",
+      "Подключение: Проводное",
+      "Совместимость: Windows, MacOS",
+      "Дополнительно: Регулируемые ножки"
+    ],
+    reviews:[
+      {name:"Марлен", text:"Цена супер, качество ещё лучше.", rating:5},
+      {name:"Алма", text:"Очень удобно печатать.", rating:4}
+    ]
   },
-  { id:8, name:"Монитор 27 XTREON XT2753PH черный", price:64990, category:"Screen", img:"image/XTREON XT2753PH черный.jpg",
-    description:"Монитор XTREON XT2753PH с диагональю 27 дюймов и разрешением Full HD для комфортной работы и развлечений.",
-    specs:["Диагональ: 27 дюймов","Разрешение: Full HD (1920x1080)","Тип матрицы: IPS","Частота обновления: 75 Гц","Интерфейсы: HDMI, VGA, DisplayPort"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+
+  {
+    id:6,
+    name:"PIXEL i5-10400F / RTX 3060 12 Гб / 16 Гб / SSD 512 Гб / Win 10",
+    price:314997,
+    category:"Computers",
+    img:"image/PIXEL.jpg",
+    description:"Игровой ПК с RTX 3060, идеален для игр.",
+    specs:[
+      "GPU: RTX 3060 12GB",
+      "CPU: Intel i5-10400F",
+      "ОЗУ: 16GB DDR4",
+      "SSD: 512GB",
+      "Wi-Fi, Bluetooth, HDMI, USB-C, Windows 10"
+    ],
+    reviews:[
+      {name:"Руслан", text:"Все игры тянет на высоких!", rating:5},
+      {name:"Еркебулан", text:"Очень тихий, хорошо охлаждается.", rating:5}
+    ]
   },
-  { id:9, name:"Мышь Logitech G305 Lightspeed 910-005291 белый", price:34980, category:"mouse", img:"image/Logitech G305 Lightspeed 910-005291 белый.jpg",
-    description:"Мышь Logitech G305 Lightspeed с высокой точностью и беспроводным подключением для комфортной работы и игр.",
-    specs:["Тип: Беспроводная игровая мышь","Разрешение сенсора: до 12000 DPI","Количество кнопок: 6 программируемых кнопок","Подключение: Lightspeed беспроводное","Дополнительно: Легкий вес, длительное время работы от батареи"],
-    reviews:[{name:"Алихан", text:"Очень свежее молоко!", rating:5},{name:"Диана", text:"Вкусное, не водянистое.", rating:4}]
+
+  {
+    id:7,
+    name:"Наушники AULA S6 бело-синий",
+    price:11489,
+    category:"Headphones",
+    img:"image/AULA S6 бело-синий.jfif",
+    description:"Наушники AULA S6 с качественным звуком.",
+    specs:[
+      "Тип: Полноразмерные",
+      "Подключение: Проводное",
+      "Микрофон: шумоподавление",
+      "Совместимость: ПК/консоли"
+    ],
+    reviews:[
+      {name:"Жанболат", text:"Звук сочный, басы мощные.", rating:5},
+      {name:"Жансая", text:"Удобные, голова не устает.", rating:4}
+    ]
+  },
+
+  {
+    id:8,
+    name:"Монитор 27 XTREON XT2753PH черный",
+    price:64990,
+    category:"Screen",
+    img:"image/XTREON XT2753PH черный.jpg",
+    description:"27-дюймовый монитор Full HD.",
+    specs:[
+      "Диагональ: 27 дюймов",
+      "Разрешение: Full HD",
+      "Матрица: IPS",
+      "75 Гц, HDMI, DP"
+    ],
+    reviews:[
+      {name:"Абай", text:"Цвета насыщенные, картинка чёткая.", rating:5},
+      {name:"Лаура", text:"За эту цену топовый монитор.", rating:5}
+    ]
+  },
+
+  {
+    id:9,
+    name:"Мышь Logitech G305 Lightspeed 910-005291 белый",
+    price:34980,
+    category:"mouse",
+    img:"image/Logitech G305 Lightspeed 910-005291 белый.jpg",
+    description:"Беспроводная игровая мышь Logitech G305.",
+    specs:[
+      "Беспроводная Lightspeed",
+      "12000 DPI",
+      "6 кнопок",
+      "Легкий вес"
+    ],
+    reviews:[
+      {name:"Ерасыл", text:"Очень отзывчивая мышь, нет задержки.", rating:5},
+      {name:"Алина", text:"Легкая и удобная, идеальна для игр.", rating:5}
+    ]
+  },
+
+  {
+    id:10,
+    name:"Смарт-часы Apple Watch Series 10 M/L 46 мм черный",
+    price:217721,
+    category:"watch",
+    img:"image/Apple Watch.jfif",
+    description:"Apple Watch Series 10 с функциями здоровья.",
+    specs:[
+      "Экран: 1.78 дюйма",
+      "Процессор: S10 SiP",
+      "ECG, сон, пульс",
+      "Водонепроницаемость 50 м"
+    ],
+    reviews:[
+      {name:"Рамиль", text:"Тренировки отслеживают идеально.", rating:5},
+      {name:"Аяулым", text:"Удобные, стильные, всё работает.", rating:5}
+    ]
+  },
+  { id:11, name:"Смартфон Apple iPhone 13 128Gb черный", price:296162, category:"phones", img:"image/Iphone 13 black.jpg",
+  description:"Iphone 13 с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.1 дюйма","Процессор: A15 Bionic","Камера: 12 МП","Аккумулятор: до 19 часов видео","Оперативная память: 4 ГБ"],
+  reviews:[{name:"Алихан", text:"Работает быстро, ни разу не подвёл.", rating:5},{name:"Диана", text:"Отличная камера, но хотелось бы чуть дешевле.", rating:4}]
+},
+
+{ id:12, name:"Смартфон Apple iPhone 15 128Gb черный", price:359889, category:"phones", img:"image/Iphone 15.jpg",
+  description:"Iphone 15 с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.1 дюйма","Процессор: A16 Bionic","Камера: 48 МП","Аккумулятор: до 20 часов видео","Оперативная память: 6 ГБ"],
+  reviews:[{name:"Алихан", text:"Камера вообще топ, ночью снимает отлично.", rating:5},{name:"Диана", text:"Дисплей очень яркий, пользоваться приятно.", rating:5}]
+},
+
+{ id:13, name:"Смартфон Apple iPhone 16 128Gb черный", price:420021, category:"phones", img:"image/Iphone 16.jfif",
+  description:"Iphone 16 с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.1 дюйма","Процессор: A16 Bionic","Камера: 48 МП","Аккумулятор: до 20 часов видео","Оперативная память: 6 ГБ"],
+  reviews:[{name:"Алихан", text:"В руке ощущается премиально. Очень быстрый.", rating:5},{name:"Диана", text:"Качество фото лучше прошлых моделей.", rating:4}]
+},
+
+{ id:14, name:"Смартфон Apple iPhone 17 Pro 256Gb оранжевый", price:732634, category:"phones", img:"image/Iphone 17 Pro.jfif",
+  description:"Iphone 17 Pro с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.1 дюйма","Процессор: A17 Bionic","Камера: 48 МП","Аккумулятор: до 23 часов видео","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Быстрее всех iPhone, что я использовал.", rating:5},{name:"Диана", text:"Цвет очень красивый, смотрится дорого.", rating:5}]
+},
+
+{ id:15, name:"Смартфон Apple iPhone 16 Pro Max 256Gb черный", price:735390, category:"phones", img:"image/Iphone 16 Pro Max.jfif",
+  description:"Iphone 16 Pro Max с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.7 дюйма","Процессор: A16 Bionic","Камера: 48 МП","Аккумулятор: до 29 часов видео","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Экран огромный — смотреть видео одно удовольствие.", rating:5},{name:"Диана", text:"Батарея держит очень долго.", rating:5}]
+},
+
+{ id:16, name:"Смартфон Apple iPhone 17 Pro Max 256Gb серебристый", price:793982, category:"phones", img:"image/Iphone 17 Pro Max.jfif",
+  description:"Iphone 17 Pro Max с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.7 дюйма","Процессор: A17 Bionic","Камера: 48 МП","Аккумулятор: до 29 часов видео","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Самый мощный смартфон, что я видел.", rating:5},{name:"Диана", text:"Камера потрясающая, зум работает идеально.", rating:5}]
+},
+
+{ id:17, name:"Смартфон Apple iPhone 13 Pro 256Gb золотистый", price:499890, category:"phones", img:"image/Iphone 13 Pro.jpg",
+  description:"Iphone 13 Pro с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.1 дюйма","Процессор: A15 Bionic","Камера: 12 МП","Аккумулятор: до 22 часов видео","Оперативная память: 6 ГБ"],
+  reviews:[{name:"Алихан", text:"Золотой цвет просто шикарный.", rating:5},{name:"Диана", text:"До сих пор очень актуальный смартфон.", rating:4}]
+},
+
+{ id:18, name:"Смартфон Apple iPhone 14 Pro Max 256Gb фиолетовый", price:600000, category:"phones", img:"image/Iphone 14 Pro Max.jpg",
+  description:"Iphone 14 Pro Max с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.7 дюйма","Процессор: A16 Bionic","Камера: 48 МП","Аккумулятор: до 29 часов видео","Оперативная память: 6 ГБ"],
+  reviews:[{name:"Алихан", text:"Фиолетовый цвет очень стильный.", rating:5},{name:"Диана", text:"Камера лучше чем у 13 поколения, заметно.", rating:5}]
+},
+
+{ id:19, name:"Смартфон Apple iPhone 14 Pro 256Gb черный", price:563943, category:"phones", img:"image/Iphone 14 Pro.jpg",
+  description:"Новый iPhone 14 Pro с передовыми технологиями и улучшенной камерой.",
+  specs:["Экран: 6.1 дюйма","Процессор: A16 Bionic","Камера: 48 МП","Аккумулятор: до 23 часов видео","Оперативная память: 6 ГБ"],
+  reviews:[{name:"Алихан", text:"Отличный телефон, камера на высоте.", rating:5},{name:"Диана", text:"Быстро работает, но дороговато.", rating:4}]
+},
+
+{ id:20, name:"Смартфон Samsung Galaxy S23 Ultra 512Gb черный", price:584989, category:"phones", img:"image/Samsung S25 Ultra 5G.jfif",
+  description:"Флагманский Samsung с огромным экраном и суперкамерой.",
+  specs:["Экран: 6.8 дюйма AMOLED","Процессор: Snapdragon 8 Gen 2","Камера: 200 МП","Аккумулятор: 5000 мА·ч","Оперативная память: 12 ГБ"],
+  reviews:[{name:"Алихан", text:"Камера 200 МП — просто бомба.", rating:5},{name:"Диана", text:"Очень большой, но это плюс для фильмов.", rating:5}]
+},
+
+{ id:21, name:"Смартфон Xiaomi 13 Pro 256Gb белый", price:289990, category:"phones", img:"image/Xiami 13 Pro.jpg",
+  description:"Сбалансированный флагман Xiaomi с быстрой зарядкой и отличной камерой.",
+  specs:["Экран: 6.73 дюйма OLED","Процессор: Snapdragon 8 Gen 2","Камера: 50 МП тройная","Аккумулятор: 4820 мА·ч","Зарядка: 120W"],
+  reviews:[{name:"Алихан", text:"120W зарядка — заряжается за 20 минут!", rating:5},{name:"Диана", text:"Фото получаются очень чёткие.", rating:4}]
+},
+
+{ id:22, name:"Смартфон Google Pixel 7 128Gb черный", price:179990, category:"phones", img:"image/Смартфон Google Pixel 7 128Gb черный.webp",
+  description:"Чистый Android и отличная камера от Google.",
+  specs:["Экран: 6.3 дюйма OLED","Процессор: Google Tensor G2","Камера: 50 МП","Аккумулятор: 4355 мА·ч","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Софт Google работает очень плавно.", rating:5},{name:"Диана", text:"Ночная съемка одна из лучших.", rating:5}]
+},
+
+{ id:23, name:"Смартфон OnePlus 11 256Gb зеленый", price:249990, category:"phones", img:"image/Смартфон OnePlus 11 256Gb зеленый.webp",
+  description:"Мощный телефон для тех, кто любит скорость и отзывчивость.",
+  specs:["Экран: 6.7 дюйма AMOLED","Процессор: Snapdragon 8 Gen 2","Камера: 50 МП","Аккумулятор: 5000 мА·ч","Оперативная память: 12 ГБ"],
+  reviews:[{name:"Алихан", text:"Очень быстрый, вообще не лагает.", rating:5},{name:"Диана", text:"Экран яркий и насыщенный.", rating:4}]
+},
+
+{ id:24, name:"Смартфон Huawei P60 Pro 256Gb серебристый", price:329990, category:"phones", img:"image/Смартфон Huawei P60 Pro 256Gb серебристый.jpg",
+  description:"Премиальный телефон с сильной камерой и стильным дизайном.",
+  specs:["Экран: 6.6 дюйма OLED","Процессор: Kirin/Qualcomm","Камера: 50 МП + телеобъектив","Аккумулятор: 4700 мА·ч","Оперативная память: 12 ГБ"],
+  reviews:[{name:"Алихан", text:"Оптический зум работает великолепно.", rating:5},{name:"Диана", text:"Дизайн один из самых красивых.", rating:5}]
+},
+
+{ id:25, name:"Смартфон Oppo Find X6 Pro 256Gb черный", price:349990, category:"phones", img:"image/Смартфон Oppo Find X6 Pro 256Gb черный.jpg",
+  description:"Флагман с акцентом на фотографию и насыщенный экран.",
+  specs:["Экран: 6.82 дюйма LTPO AMOLED","Процессор: Snapdragon 8 Gen 2","Камера: 50 МП тройная","Аккумулятор: 5000 мА·ч","Зарядка: 80W"],
+  reviews:[{name:"Алихан", text:"Лучший экран, что я видел на смартфоне.", rating:5},{name:"Диана", text:"Отличные цвета, очень насыщенные.", rating:4}]
+},
+
+{ id:26, name:"Смартфон Realme GT 3 256Gb синий", price:169990, category:"phones", img:"image/Смартфон Realme GT 3 256Gb синий.jpg",
+  description:"Игровой смартфон с высокой частотой обновления и мощным чипом.",
+  specs:["Экран: 6.7 дюйма 144Hz","Процессор: Snapdragon 8+ Gen 1","Камера: 50 МП","Аккумулятор: 5500 мА·ч","Оперативная память: 12 ГБ"],
+  reviews:[{name:"Алихан", text:"Игры идут идеально, не нагревается.", rating:5},{name:"Диана", text:"Очень плавная картинка 144Hz.", rating:5}]
+},
+
+{ id:27, name:"Смартфон Sony Xperia 5 IV 128Gb черный", price:299990, category:"phones", img:"image/Смартфон Sony Xperia 5 IV 128Gb черный.jpg",
+  description:"Компактный смартфон с профессиональными возможностями камеры и звука.",
+  specs:["Экран: 6.1 дюйма OLED","Процессор: Snapdragon 8 Gen 1","Камера: 12 МП тройная","Аудио: высококачественный звук","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Идеален для видео и музыки.", rating:5},{name:"Диана", text:"Удобный размер, приятно держать.", rating:4}]
+},
+
+{ id:28, name:"Смартфон Nokia X30 128Gb зеленый", price:119990, category:"phones", img:"image/Смартфон Nokia X30 128Gb зеленый.jpg",
+  description:"Надежный смартфон с чистым Android и долгой поддержкой обновлений.",
+  specs:["Экран: 6.43 дюйма AMOLED","Процессор: Snapdragon 695","Камера: 50 МП","Аккумулятор: 4200 мА·ч","Оперативная память: 6 ГБ"],
+  reviews:[{name:"Алихан", text:"Очень удобный интерфейс, ничего лишнего.", rating:4},{name:"Диана", text:"Аккуратно собран, выглядит качественно.", rating:4}]
+},
+
+{ id:29, name:"Смартфон Motorola Edge 40 128Gb фиолетовый", price:139990, category:"phones", img:"image/Смартфон Motorola Edge 40 128Gb фиолетовый.webp",
+  description:"Стильный смартфон с плавным экраном и сбалансированной камерой.",
+  specs:["Экран: 6.55 дюйма pOLED","Процессор: MediaTek Dimensity","Камера: 50 МП","Аккумулятор: 4400 мА·ч","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Очень лёгкий и тонкий — удобно носить.", rating:4},{name:"Диана", text:"Дисплей реально сочный.", rating:5}]
+},
+
+{ id:30, name:"Смартфон Honor Magic5 Pro 256Gb черный", price:279990, category:"phones", img:"image/Смартфон Honor Magic5 Pro 256Gb черный.webp",
+  description:"Премиальный аппарат Honor с мощной камерой и быстрой зарядкой.",
+  specs:["Экран: 6.7 дюйма OLED","Процессор: Snapdragon 8 Gen 2","Камера: 50 МП тройная","Аккумулятор: 5100 мА·ч","Зарядка: 100W"],
+  reviews:[{name:"Алихан", text:"Камера делает невероятно детализированные фото.", rating:5},{name:"Диана", text:"Быстрая зарядка — супер.", rating:5}]
+},
+
+{ id:31, name:"Смартфон TCL 40 XL 128Gb черный", price:79990, category:"phones", img:"image/Смартфон TCL 40 XL 128Gb черный.png",
+  description:"Бюджетный смартфон с большим экраном и хорошей автономностью.",
+  specs:["Экран: 6.7 дюйма","Процессор: MediaTek","Камера: 50 МП","Аккумулятор: 6000 мА·ч","Оперативная память: 6 ГБ"],
+  reviews:[{name:"Алихан", text:"Батарея просто монстр — хватает на два дня.", rating:5},{name:"Диана", text:"За такие деньги супер вариант.", rating:4}]
+},
+
+{ id:32, name:"Смартфон Asus Zenfone 9 128Gb хаки", price:224990, category:"phones", img:"image/Смартфон Asus Zenfone 9 128Gb хаки.jfif",
+  description:"Компактный и мощный телефон для тех, кто любит небольшие габариты.",
+  specs:["Экран: 5.9 дюйма AMOLED","Процессор: Snapdragon 8+ Gen 1","Камера: 50 МП","Аккумулятор: 4300 мА·ч","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Лучший компактный смартфон.", rating:5},{name:"Диана", text:"Удобно пользоваться одной рукой.", rating:4}]
+},
+
+{ id:33, name:"Смартфон Redmi Note 12 Pro 128Gb голубой", price:109990, category:"phones", img:"image/Смартфон Redmi Note 12 Pro 128Gb голубой.jpg",
+  description:"Популярный среднебюджетный смартфон с хорошими камерами.",
+  specs:["Экран: 6.67 дюйма AMOLED","Процессор: MediaTek Dimensity 1080","Камера: 108 МП","Аккумулятор: 5000 мА·ч","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Очень чёткие фото, особенно днём.", rating:5},{name:"Диана", text:"Долго держит батарея.", rating:4}]
+},
+
+{ id:34, name:"Смартфон Poco F5 256Gb черный", price:129990, category:"phones", img:"image/Смартфон Poco F5 256Gb черный.jpg",
+  description:"Производительный смартфон с игровой направленностью.",
+  specs:["Экран: 6.67 дюйма 120Hz","Процессор: Snapdragon 7+","Камера: 64 МП","Аккумулятор: 5000 мА·ч","Оперативная память: 12 ГБ"],
+  reviews:[{name:"Алихан", text:"Тянет все игры на высоких настройках.", rating:5},{name:"Диана", text:"Экран очень плавный и отзывчивый.", rating:5}]
+},
+
+{ id:35, name:"Смартфон ZTE Axon 40 128Gb черный", price:139990, category:"phones", img:"image/Смартфон ZTE Axon 40 128Gb черный.webp",
+  description:"Инновационный смартфон с подэкранной камерой и тонким дизайном.",
+  specs:["Экран: 6.92 дюйма AMOLED","Процессор: Snapdragon 870","Камера: 64 МП","Аккумулятор: 4200 мА·ч","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Подэкранная камера — очень прикольно.", rating:4},{name:"Диана", text:"Стильно выглядит, тонкий дизайн.", rating:4}]
+},
+
+{ id:36, name:"Смартфон Alcatel 1S 64Gb синий", price:19990, category:"phones", img:"image/Смартфон Alcatel 1S 64Gb синий.webp",
+  description:"Простой и недорогой смартфон для ежедневных задач.",
+  specs:["Экран: 6.52 дюйма","Процессор: Unisoc","Камера: 13 МП","Аккумулятор: 4000 мА·ч","Оперативная память: 3 ГБ"],
+  reviews:[{name:"Алихан", text:"Для звонков и мессенджеров идеален.", rating:4},{name:"Диана", text:"Отличный бюджетный вариант.", rating:4}]
+},
+
+{ id:37, name:"Смартфон Blackview BV8800 128Gb жёлтый", price:99990, category:"phones", img:"image/Смартфон Blackview BV8800 128Gb жёлтый.jpg",
+  description:"Защищённый смартфон с мощной батареей и прочным корпусом.",
+  specs:["Экран: 6.58 дюйма","Процессор: MediaTek Helio","Камера: 50 МП","Аккумулятор: 8380 мА·ч","Пыле/влагоустойчивость: IP68"],
+  reviews:[{name:"Алихан", text:"Можно уронить и ничего не будет.", rating:5},{name:"Диана", text:"Батарея держит почти три дня.", rating:5}]
+},
+
+{ id:38, name:"Смартфон Vivo V27 128Gb персиковый", price:149990, category:"phones", img:"image/Смартфон Vivo V27 128Gb персиковый.webp",
+  description:"Стильный смартфон с ярким дизайном и хорошей камерой для селфи.",
+  specs:["Экран: 6.56 дюйма AMOLED","Процессор: MediaTek Dimensity","Камера: 50 МП с OIS","Аккумулятор: 4600 мА·ч","Оперативная память: 8 ГБ"],
+  reviews:[{name:"Алихан", text:"Селфи получаются супер, живые.", rating:5},{name:"Диана", text:"Очень красивый цвет корпуса.", rating:5}]
+},
+  {
+    id: 39,
+    name: "Dell XPS 15 9530 15.6",
+    price: 749990,
+    category: "laptops",
+    img: "image/Dell.jpg",
+    description: "Dell XPS 15 с мощным процессором Intel и качественным экраном для профессиональной работы и развлечений.",
+    specs: [
+      "Экран: 15.6 дюйма OLED 4K",
+      "Процессор: Intel Core i9-13900H",
+      "Оперативная память: 32 ГБ",
+      "Накопитель: 1 ТБ SSD",
+      "Графика: NVIDIA GeForce RTX 4070"
+    ],
+    reviews: [
+      { name: "Алихан", text: "Идеально для программирования и графики.", rating: 5 },
+      { name: "Диана", text: "Красивый экран, но немного тяжелый.", rating: 4 }
+    ]
+  },
+  {
+    id: 40,
+    name: "HP Spectre x360 14",
+    price: 619990,
+    category: "laptops",
+    img: "image/HP Spectre.jfif",
+    description: "Конвертируемый ноутбук HP Spectre x360 с сенсорным экраном и отличной автономностью.",
+    specs: [
+      "Экран: 14 дюймов OLED Touch",
+      "Процессор: Intel Core i7-1365U",
+      "Оперативная память: 16 ГБ",
+      "Накопитель: 512 ГБ SSD",
+      "Графика: Intel Iris Xe"
+    ],
+    reviews: [
+      { name: "Алихан", text: "Прекрасный ноутбук для работы и учебы.", rating: 5 },
+      { name: "Диана", text: "Легкий и стильный, экран очень яркий.", rating: 4 }
+    ]
+  },
+  {
+    id: 41,
+    name: "ASUS ROG Zephyrus G14",
+    price: 899990,
+    category: "laptops",
+    img: "image/Asus ROG.jfif",
+    description: "Игровой ноутбук ASUS ROG Zephyrus G14 с мощным процессором и видеокартой для игр и стриминга.",
+    specs: [
+      "Экран: 14 дюймов QHD 120Hz",
+      "Процессор: AMD Ryzen 9 7940HS",
+      "Оперативная память: 32 ГБ",
+      "Накопитель: 1 ТБ SSD",
+      "Графика: NVIDIA GeForce RTX 4070"
+    ],
+    reviews: [
+      { name: "Алихан", text: "Игры идут на ультра без лагов.", rating: 5 },
+      { name: "Диана", text: "Компактный и мощный, батарея держит дольше ожиданий.", rating: 4 }
+    ]
+  },
+  {
+    id: 42,
+    name: "Lenovo ThinkPad X1 Carbon Gen 11",
+    price: 769990,
+    category: "laptops",
+    img: "image/Lenova ThinkPad.jfif",
+    description: "Легкий и прочный бизнес-ноутбук Lenovo ThinkPad X1 Carbon с долгой автономностью.",
+    specs: [
+      "Экран: 14 дюймов UHD",
+      "Процессор: Intel Core i7-1360P",
+      "Оперативная память: 16 ГБ",
+      "Накопитель: 1 ТБ SSD",
+      "Графика: Intel Iris Xe"
+    ],
+    reviews: [
+      { name: "Алихан", text: "Идеально для офиса и частых поездок.", rating: 5 },
+      { name: "Диана", text: "Клавиатура очень удобная, стильный дизайн.", rating: 4 }
+    ]
   }
 ];
 
@@ -278,54 +661,6 @@ function filterPrice(){
   filteredProducts = filteredProducts.filter(p=>p.price>=min && p.price<=max);
   render(filteredProducts);
 }
-
-// Корзина
-let cart = [];
-const cartCount = document.getElementById("cartCount");
-const miniCart = document.getElementById("miniCart");
-const cartItems = document.getElementById("cartItems");
-const cartTotal = document.getElementById("cartTotal");
-
-function toggleCart(){ miniCart.classList.toggle("open"); }
-
-function addToCart(id){
-  const p = products.find(x=>x.id===id);
-  let f = cart.find(x=>x.id===id);
-  if(f) f.qty++;
-  else cart.push({...p, qty:1});
-  updateCart();
-}
-
-function changeQty(id,dir){
-  const item = cart.find(x=>x.id===id);
-  if(dir==='+') item.qty++; else item.qty--;
-  if(item.qty<=0) cart = cart.filter(x=>x.id!==id);
-  updateCart();
-}
-
-function updateCart(){
-  cartItems.innerHTML="";
-  let total=0, count=0;
-  cart.forEach(i=>{
-    total+=i.qty*i.price;
-    count+=i.qty;
-    cartItems.innerHTML+=`
-      <div class="cart-item">
-        <img src="${i.img}">
-        <div>
-          <div>${i.name}</div>
-          <div class="qty">
-            <button onclick="changeQty(${i.id},'-')">-</button>
-            <span>${i.qty}</span>
-            <button onclick="changeQty(${i.id},'+')">+</button>
-          </div>
-        </div>
-      </div>`;
-  });
-  cartTotal.textContent = total.toLocaleString();
-  cartCount.textContent = count;
-}
-
 // Админ
 const admin_panel = document.getElementById("admin-panel");
 function openAdmin(){ admin_panel.style.display="block"; }
@@ -344,14 +679,143 @@ function saveProduct(){
   render(filteredProducts);
   closeAdmin();
 }
-render(filteredProducts);
 
-// Переход на checkout.html
-function goToCheckout(){
-  if(cart.length===0){ alert("Корзина пуста!"); return; }
-  localStorage.setItem('cartItems', JSON.stringify(cart));
-  window.location.href = 'checkout.html';
+render(filteredProducts);
+// ===================== КОРЗИНА ==========================
+
+// Открыть/закрыть корзину
+function toggleCart() {
+  document.getElementById("miniCart").classList.toggle("open");
+};
+
+// Добавить в корзину
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+function addToCart(product) {
+  let exist = cart.find(p => p.id === product.id);
+
+  if (exist) {
+    exist.qty++;
+  } else {
+    cart.push({ ...product, qty: 1 });
+  }
+
+  saveCart();
+  updateMiniCart();
 }
+
+// Увеличить количество
+function increaseQty(id) {
+  let item = cart.find(p => p.id === id);
+  item.qty++;
+  updateCart();
+}
+
+// Уменьшить количество
+function decreaseQty(id) {
+  let item = cart.find(p => p.id === id);
+  if (item.qty > 1) item.qty--;
+  else cart = cart.filter(p => p.id !== id);
+  updateCart();
+}
+
+// Обновление корзины
+function updateMiniCart() {
+  const mini = document.getElementById("cartItems");
+  const total = document.getElementById("cartTotal");
+
+  let totalPrice = 0;
+  mini.innerHTML = "";
+
+  cart.forEach(item => {
+    totalPrice += item.price * item.qty;
+
+    mini.innerHTML += `
+      <div style="display:flex; gap:10px; align-items:center; padding:10px 0;">
+        <img src="${item.img}" width="50">
+        <div style="flex:1;">
+          ${item.name} × 
+          <button onclick="decreaseQty(${item.id})" style="padding:2px 6px;">-</button>
+          ${item.qty}
+          <button onclick="increaseQty(${item.id})" style="padding:2px 6px;">+</button>
+        </div>
+        <div>${item.price} ₸</div>
+      </div>
+    `;
+  });
+
+  total.textContent = totalPrice;
+}
+
+function increaseQty(id) {
+  let item = cart.find(p => p.id === id);
+  if (item) {
+    item.qty++;
+    saveCart();
+    updateMiniCart();
+  }
+}
+
+function decreaseQty(id) {
+  let item = cart.find(p => p.id === id);
+  if (item) {
+    if (item.qty > 1) {
+      item.qty--;
+    } else {
+      cart = cart.filter(p => p.id !== id);
+    }
+    saveCart();
+    updateMiniCart();
+  }
+}
+
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function showProducts(list) {
+  const productsDiv = document.getElementById("products");
+  productsDiv.innerHTML = "";
+
+  list.forEach(p => {
+    // Используем JSON.stringify, чтобы передать весь объект
+    productsDiv.innerHTML += `
+      <div class="card">
+        <img src="${p.img}">
+        <div class="title">${p.name}</div>
+        <div class="price">${p.price} ₸</div>
+        <button onclick='addToCart(${JSON.stringify(p)})'>В корзину</button>
+      </div>
+    `;
+  });
+}
+
+function addToCart(product) {
+  // Убедимся, что id есть
+  if (!product.id) {
+    product.id = Date.now(); // если нет id, создаём уникальный
+  }
+
+  let exist = cart.find(p => p.id === product.id);
+
+  if (exist) {
+    exist.qty++;
+  } else {
+    cart.push({ ...product, qty: 1 });
+  }
+
+  saveCart();
+  updateMiniCart();
+}
+
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// Старт
+showProducts(products);
+
 </script>
 </body>
 </html>
