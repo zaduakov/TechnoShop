@@ -1,65 +1,173 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Оформление заказа</title>
-<style>
-body { font-family: 'Segoe UI', sans-serif; background:#f5f5f7; margin:0; padding:20px; }
-h2 { color:#d7000f; }
-form { background:white; padding:20px; border-radius:10px; max-width:400px; margin:auto; box-shadow:0 0 15px rgba(0,0,0,.2); }
-input, textarea { width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc; }
-button { width:100%; padding:12px; border:none; border-radius:10px; background:#d7000f; color:white; cursor:pointer; font-size:16px; }
-button:hover { background:#b2000b; }
-ul { padding-left:20px; }
-</style>
+  <meta charset="UTF-8">
+  <title>Оформление заказа – TechShop</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #d7000f;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      margin-right: 15px;
+      object-fit: cover;
+    }
+
+    .total-block {
+      font-size: 20px;
+      font-weight: bold;
+      padding: 15px 0;
+      text-align: right;
+      color: #333;
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .btn {
+      width: 100%;
+      background: #d7000f;
+      color: #fff;
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background: #a8000c;
+    }
+
+  </style>
 </head>
 <body>
 
-<h2>Оформление заказа</h2>
+<h1>Оформление заказа</h1>
 
-<h3>Ваши товары:</h3>
-<ul id="orderList"></ul>
-<div><strong>Итого: </strong><span id="orderTotal">0</span> ₸</div>
+<div class="container">
 
-<form id="orderForm">
-  <input type="text" id="customerName" placeholder="Ваше имя" required>
-  <input type="text" id="customerPhone" placeholder="Телефон" required>
-  <textarea id="customerAddress" placeholder="Адрес доставки" required></textarea>
-  <button type="submit">Подтвердить заказ</button>
-</form>
+  <h2>Ваши товары</h2>
+  <div id="checkoutItems"></div>
+
+  <div class="total-block">
+    Итого: <span id="checkoutTotal">0</span> тг
+  </div>
+
+  <h2>Данные для доставки</h2>
+
+  <form id="orderForm">
+    <label>Ваше имя:</label>
+    <input type="text" id="name" required>
+
+    <label>Номер телефона:</label>
+    <input type="text" id="phone" placeholder="+7 ___ ___ __ __" required>
+
+    <label>Адрес доставки:</label>
+    <textarea id="address" rows="3" required></textarea>
+
+    <label>Способ оплаты:</label>
+    <select id="payment">
+      <option value="card">Оплата картой</option>
+      <option value="cash">Наличные</option>
+      <option value="kaspi">Kaspi QR</option>
+    </select>
+
+    <button type="button" class="btn" onclick="submitOrder()">Подтвердить заказ</button>
+  </form>
+</div>
 
 <script>
-const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-const orderList = document.getElementById('orderList');
-const orderTotal = document.getElementById('orderTotal');
+   // Загружаем корзину
+   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-let total = 0;
-cart.forEach(i=>{
-  const li = document.createElement('li');
-  li.textContent = `${i.name} x${i.qty} = ${(i.price*i.qty).toLocaleString()} ₸`;
-  orderList.appendChild(li);
-  total += i.price*i.qty;
-});
-orderTotal.textContent = total.toLocaleString();
+const checkoutItems = document.getElementById("checkoutItems");
+const checkoutTotal = document.getElementById("checkoutTotal");
 
-// Обработка формы
-document.getElementById('orderForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  const name = document.getElementById('customerName').value.trim();
-  const phone = document.getElementById('customerPhone').value.trim();
-  const address = document.getElementById('customerAddress').value.trim();
-  if(!name || !phone || !address){ alert("Заполните все поля!"); return; }
+function loadCheckout () {
+  let total = 0;
+  checkoutItems.innerHTML = "";
 
-  let msg = "Заказ подтверждён!\n\nТовары:\n";
-  cart.forEach(i=>{ msg += `${i.name} x${i.qty} = ${(i.price*i.qty).toLocaleString()} ₸\n`; });
-  msg += `\nИтого: ${total.toLocaleString()} ₸\n`;
-  msg += `\nИмя: ${name}\nТелефон: ${phone}\nАдрес: ${address}`;
-  alert(msg);
+  cart.forEach(item => {
+    total += item.price * item.qty;
 
-  localStorage.removeItem('cartItems');
-  window.location.href = 'index.html';
-});
+    checkoutItems.innerHTML += `
+      <div class="cart-item">
+        <img src="${item.img || item.image}">
+
+        <div>
+          <div><b>${item.name}</b></div>
+          <div>Количество: ${item.qty}</div>
+          <div>Цена: ${item.price.toLocaleString()} тг</div>
+        </div>
+      </div>
+    `;
+  });
+
+  checkoutTotal.textContent = total.toLocaleString();
+};
+
+loadCheckout();
+
+// Подтверждение заказа
+function submitOrder() {
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const payment = document.getElementById("payment").value;
+
+  if (!name || !phone || !address) {
+    alert("Пожалуйста, заполните все поля!");
+    return;
+  }
+
+  alert("Спасибо! Ваш заказ оформлен.");
+
+  localStorage.removeItem("cart");
+  window.location.href = "index.html";
+}
 </script>
+
 </body>
 </html>
